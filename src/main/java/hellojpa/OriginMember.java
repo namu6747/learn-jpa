@@ -3,9 +3,10 @@ package hellojpa;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-public class Member {
+//@Entity
+public class OriginMember {
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column(name = "name")

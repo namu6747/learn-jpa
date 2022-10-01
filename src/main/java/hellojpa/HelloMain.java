@@ -5,9 +5,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.List;
 
-public class JpaMain {
+public class HelloMain {
 
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -18,21 +17,10 @@ public class JpaMain {
 
         try {
 
-            List<Member> result = em.createQuery("select m from Member as m",Member.class)
-                    //.setFirstResult(5)
-                    //.setMaxResults(10)
-                    .getResultList();
+            SecondMember secondMember = new SecondMember();
+            secondMember.setUsername("C");
 
-            for (Member member : result) {
-                System.out.println("member = " + member.getName());
-            }
-
-            Member member = new Member();
-            member.setId(1L);
-            member.setName("HelloA");
-
-            em.flush();
-            em.persist(member);
+            em.persist(secondMember);
 
             tx.commit();
         } catch(Exception e){
