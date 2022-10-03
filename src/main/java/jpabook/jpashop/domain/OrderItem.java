@@ -1,13 +1,12 @@
 package jpabook.jpashop.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
-//@Entity
-@Data
+@Entity
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderItem {
@@ -24,5 +23,17 @@ public class OrderItem {
     @JoinColumn(name = "ITEM_ID")
     private Item item;
     private int orderPrice;
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                ", order=" + order +
+                ", item=" + item +
+                ", orderPrice=" + orderPrice +
+                ", count=" + count +
+                '}';
+    }
+
     private int count;
 }
