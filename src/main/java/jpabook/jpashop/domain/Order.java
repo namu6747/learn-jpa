@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "orderItems")
 public class Order {
 
     @Id @GeneratedValue
@@ -31,13 +32,8 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", member=" + member +
-                ", orderDate=" + orderDate +
-                ", status=" + status +
-                '}';
-    }
+    @OneToOne
+    @JoinColumn(name = "DELIVERY_ID") // 주 테이블에 넣었다.
+    private Delivery delivery;
+
 }
