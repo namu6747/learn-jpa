@@ -18,76 +18,79 @@ public class JpaMain {
         EntityTransaction tx = em.getTransaction();
 
         tx.begin();
-        System.out.println("1=====================================");
         try{
-            String str = "hello";
-            Member member = new Member();
-            member.setName(str);
-            member.setCity(str);
-            member.setStreet(str);
-            member.setZipcode("12345");
-            System.out.println("2=====================================");
-
-            Item item = new Item();
-            item.setName(str);
-            item.setPrice(5000);
-            item.setStockQuantity(100);
-            System.out.println("3=====================================");
-
-            Order order = new Order();
-            OrderItem orderItem = new OrderItem();
-            order.getOrderItems().add(orderItem);
-            order.setMember(member);
-            order.setStatus(OrderStatus.ORDER);
-            order.setOrderDate(LocalDateTime.now());
-            orderItem.setCount(2);
-            orderItem.setOrderPrice(10000);
-            orderItem.setItem(item);
+            Member member = Member.data();
+            Item item = Item.data();
+            Book book = new Book();
+            book.setName("JPA");
+            book.setAuthor("박재민");
+            OrderItem orderItem = OrderItem.data(item);
+            Delivery delivery = Delivery.data();
+            Order order = Order.data(member,delivery);
             orderItem.setOrder(order);
-            System.out.println("4=====================================");
 
             List<Object> list = new ArrayList<>();
             list.add(member);
             list.add(item);
-            list.add(orderItem);
+            list.add(book);
             list.add(order);
-            System.out.println("5=====================================");
-
             list.stream().forEach(e->em.persist(e));
-            System.out.println("6=====================================");
-
 
             em.flush();
-            em.clear();
+            nextObject(em);
 
-            System.out.println("7=====================================");
+            System.out.println("===== member start =====");
+            /* LazyInitializationException
+            Member proxyMember = em.getReference(Member.class,member.getId());
+            em.detach(proxyMember);
+            proxyMember.getName();
+            */
+
             Member findMember = em.find(Member.class, member.getId());
-            System.out.println("findMember = " + findMember.getName());
-            System.out.println("findMember.getOrders().get(0).getId() = " + findMember.getOrders().get(0).getId());
-            System.out.println("findMember.getOrders().get(0).getOrderItems().get(0) = " + findMember.getOrders().get(0).getOrderItems().get(0));
-            
-            Item findItem = em.find(Item.class, item.getId());
-            System.out.println("8=====================================");
-            System.out.println("findItem.getName() = " + findItem.getName());
-
-            OrderItem findOrderItem = em.find(OrderItem.class, orderItem.getId());
-            System.out.println("findOrderItem.getOrderPrice() = " + findOrderItem.getOrderPrice());
-            System.out.println("findOrderItem.getOrder().getId() = " + findOrderItem.getOrder().getId());
-            System.out.println("findOrderItem.getOrder().getMember().getName() = " + findOrderItem.getOrder().getMember().getName());
-            System.out.println("findOrderItem.getItem().getName() = " + findOrderItem.getItem().getName());
-            System.out.println("9=====================================");
-
-            Order findOrder = em.find(Order.class, order.getId());
-            System.out.println("findOrder.getMember(). = " + findOrder.getMember().getId());
-            System.out.println("findOrder.getOrderItems().get(0).getId() = " + findOrder.getOrderItems().get(0).getId());
-            System.out.println("findOrder.getMember().getName() = " + findOrder.getMember().getName());
-
-            System.out.println("10=================================");
-
             System.out.println("findMember = " + findMember);
-            System.out.println("item.getId = " + item);
+            nextSql();
+            System.out.println("findMember.getOrders().get(0) = " + findMember.getOrders().get(0));
+            System.out.println("===== member end =====");
+
+            nextObject(em);
+            System.out.println("===== item start =====");
+            Item findItem = em.find(Item.class, item.getId());
+            System.out.println("findItem = " + findItem);
+            nextSql();
+            System.out.println("findItem.getCategories() = " + findItem.getCategories());
+            System.out.println("===== item end =====");
+
+            nextObject(em);
+            System.out.println("===== order item start =====");
+            OrderItem findOrderItem = em.find(OrderItem.class, orderItem.getId());
             System.out.println("findOrderItem = " + findOrderItem);
-            System.out.println("findOrder.getId() = " + findOrder);
+            nextSql();
+            System.out.println("findOrderItem.getItem() = " + findOrderItem.getItem());
+            nextSql();
+            System.out.println("findOrderItem.getOrder() = " + findOrderItem.getOrder());
+            System.out.println("===== order item end =====");
+
+            nextObject(em);
+            System.out.println("===== order start =====");
+            Order findOrder = em.find(Order.class, order.getId());
+            System.out.println("findOrder = " + findOrder);
+            nextSql();
+            System.out.println("findOrder.getOrderItems().get(0) = " + findOrder.getOrderItems().get(0));
+            nextSql();
+            System.out.println("findOrder.getMember() = " + findOrder.getMember());
+            nextSql();
+            System.out.println("findOrder.getDelivery() = " + findOrder.getDelivery());
+            nextSql();
+            System.out.println("findOrder.getStatus() = " + findOrder.getStatus());
+            System.out.println("===== order end =====");
+
+            nextObject(em);
+            System.out.println("===== delivery start =====");
+            Delivery findDelivery = em.find(Delivery.class, delivery.getId());
+            System.out.println("findDelivery = " + findDelivery);
+            nextSql();
+            System.out.println("findDelivery.getOrder() = " + findDelivery.getOrder());
+            System.out.println("===== delivery end =====");
 
             tx.commit();
         }catch(Exception ex){
@@ -98,6 +101,17 @@ public class JpaMain {
         }
         emf.close();
 
+    }
+
+    private static void nextObject(EntityManager em){
+        em.clear();
+        System.out.println("");
+        System.out.println("");
+        System.out.println("");
+    }
+
+    private static void nextSql(){
+        System.out.println();
     }
 
 }

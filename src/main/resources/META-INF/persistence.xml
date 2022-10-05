@@ -17,7 +17,6 @@
                       value="jdbc:h2:tcp://localhost/~/test"/>
             <property name="hibernate.dialect"
                       value="org.hibernate.dialect.H2Dialect"/>
-
             <!-- 옵션 -->
             <property name="hibernate.show_sql"
                       value="true"/>
