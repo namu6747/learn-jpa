@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Setter
 public class BaseEntity {
 
-    private String createdBy;
-    private LocalDateTime createdDate;
-    private String lastModifiedBy;
-    private LocalDateTime lastModifiedDate;
+    private String createdBy = "jaemin";
+    private LocalDateTime createdDate = LocalDateTime.now();
+    private String lastModifiedBy = "jaemin";
+    private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
 }

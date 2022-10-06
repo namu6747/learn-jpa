@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
-@Entity
+//@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,9 +18,8 @@ public class Delivery extends BaseEntity {
     @GeneratedValue
     private Long id;
 
-    private String city;
-    private String street;
-    private String zipcode;
+    @Embedded
+    private Address address;
     @Enumerated(EnumType.STRING)
     private DeliveryStatus status;
 
@@ -29,9 +28,7 @@ public class Delivery extends BaseEntity {
 
     public static Delivery data() {
         return Delivery.builder()
-                .city("pusan1")
-                .street("999-71")
-                .zipcode("123451")
+                .address(Address.getAddress())
                 .status(DeliveryStatus.START)
                 .build();
     }
